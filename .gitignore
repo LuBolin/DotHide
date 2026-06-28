@@ -1,0 +1,25 @@
+# .NET
+bin/
+obj/
+DotHideBuild/
+publish/
+*.user
+*.suo
+*.cache
+*.dll
+*.pdb
+*.exe
+.codegraph/
+
+# Test results
+TestResults/
+*.trx
+
+# IDE
+.vs/
+.idea/
+*.swp
+
+# OS
+Thumbs.db
+Desktop.ini
