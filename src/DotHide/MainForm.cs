@@ -556,11 +556,20 @@ public sealed class MainForm : Form
             var status = pending == 0
                 ? $"{_previewRows.Count} item(s). Already applied."
                 : $"{_previewRows.Count} item(s), {pending} pending change(s).";
+
             var missingRoots = FileScanner.LastScanErrors.Count(error => error.StartsWith("Root folder not found:", StringComparison.OrdinalIgnoreCase));
             if (missingRoots > 0)
-                status += missingRoots == 1
-                    ? " 1 configured folder missing."
-                    : $" {missingRoots} configured folders missing.";
+                status += $" {missingRoots} configured folder(s) missing and skipped.";
+
+            var accessDenied = FileScanner.LastScanErrors.Count(error => error.StartsWith("Access denied:", StringComparison.OrdinalIgnoreCase));
+            if (accessDenied > 0)
+                status += $" {accessDenied} folder(s) not accessible.";
+
+            var missingManagedItems = _previewRows.Count(result => !result.Exists && result.Status == "Missing");
+            if (missingRoots > 0)
+                status += " Remove from config to stop tracking them.";
+            if (missingManagedItems > 0)
+                status += $" {missingManagedItems} tracked item(s) missing on disk (safe, not deleted).";
 
             _status.Text = status;
         }
